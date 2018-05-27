@@ -13,6 +13,7 @@
     "fully-connected-topology": "^1.1.1",
     "js-sha3": "^0.7.0",
     "optimist": "^0.6.1",
+    "sqlite-sync": "^0.3.8",
     "stream-set": "^1.1.0",
     "tweetnacl": "^1.0.0"
   },
