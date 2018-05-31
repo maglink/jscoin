@@ -12,6 +12,7 @@ angular.module('jscApp', [])
         $scope.address = jsCoin.transactions.getAddressFromPubKey($scope.publicKey);
         updateBalance();
         updateNetwork();
+        updateTrxsList();
 
         let miner = jsCoin.miner;
 
@@ -34,9 +35,16 @@ angular.module('jscApp', [])
         jsCoin.blocks.storage.onChangeLastBlock(() => {
             updateNetwork();
             updateBalance();
+            updateTrxsList();
             setTimeout(() => $scope.$apply(), 0);
         });
 
+
+        jsCoin.transactions.storage.onTransactionsAdded(() => {
+            updateBalance();
+            updateTrxsList();
+            setTimeout(() => $scope.$apply(), 0);
+        });
 
         function updateBalance() {
             $scope.balance = jsCoin.transactions.storage._getAddressValue($scope.address);
@@ -47,8 +55,13 @@ angular.module('jscApp', [])
             $scope.lastBlock = jsCoin.blocks.storage.getLastBlockHeader();
             $scope.networkDifficulty = $scope.lastBlock.header.difficulty;
 
-            //please let me know how it calculate properly
-            $scope.networkHashrate = Math.pow(16, ($scope.networkDifficulty/16))/60;
+            //please let me know how calculate it properly
+            $scope.networkHashrate = Math.pow(16, ($scope.networkDifficulty/16))/600;
+        }
+
+        function updateTrxsList() {
+            $scope.trxs = jsCoin.transactions.getTrxsListByAddress($scope.address);
+            console.log($scope.trxs.length)
         }
 
         $scope.newTrx = {};
@@ -64,5 +77,6 @@ angular.module('jscApp', [])
                 amount, $scope.newTrx.message, "");
 
             $scope.newTrx = {};
-        }
+        };
+
     });

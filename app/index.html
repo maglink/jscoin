@@ -26,6 +26,19 @@
 
 
 <h2>Transaction</h2>
+
+
+<table>
+    <tr ng-repeat="item in trxs">
+        <td>{{ item.trx_hash }}</td>
+        <td>{{ item.trx_timestamp }}</td>
+        <td>{{ item.block_height }}</td>
+        <td>{{ item.change }}</td>
+        <td>{{ item.fee }}</td>
+    </tr>
+</table>
+
+
 <form name="createTrx" ng-submit="createTransaction(createTrx)">
 
     <div class="trx_add-head">
@@ -66,6 +79,7 @@
     </div>
 
 </form>
+
 
 
 </body>
