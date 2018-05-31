@@ -39,7 +39,7 @@ angular.module('jscApp', [])
 
 
         function updateBalance() {
-            $scope.balance = jsCoin.transactions.storage.getAddressBalance($scope.address);
+            $scope.balance = jsCoin.transactions.storage._getAddressValue($scope.address);
             $scope.balance = ($scope.balance/100000000).toFixed(8);
         }
 
