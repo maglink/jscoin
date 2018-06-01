@@ -9,4 +9,4 @@ let argv = require('optimist')
 
 jsCoin.init(__dirname, argv.config);
 
-jsCoin.miner.start();
+//jsCoin.miner.start();

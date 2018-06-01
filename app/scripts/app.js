@@ -39,7 +39,6 @@ angular.module('jscApp', [])
             setTimeout(() => $scope.$apply(), 0);
         });
 
-
         jsCoin.transactions.storage.onTransactionsAdded(() => {
             updateBalance();
             updateTrxsList();
@@ -47,7 +46,7 @@ angular.module('jscApp', [])
         });
 
         function updateBalance() {
-            $scope.balance = jsCoin.transactions.storage._getAddressValue($scope.address);
+            $scope.balance = jsCoin.transactions.storage.getAddressBalance($scope.address);
             $scope.balance = ($scope.balance/100000000).toFixed(8);
         }
 
@@ -61,7 +60,6 @@ angular.module('jscApp', [])
 
         function updateTrxsList() {
             $scope.trxs = jsCoin.transactions.getTrxsListByAddress($scope.address);
-            console.log($scope.trxs.length)
         }
 
         $scope.newTrx = {};
