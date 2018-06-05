@@ -9,4 +9,7 @@ let argv = require('optimist')
 
 jsCoin.init(__dirname, argv.config);
 
+let address = jsCoin.transactions.getAddressFromPubKey(jsCoin.config.data.wallet.pubKey);
+console.log("Wallet address: ", address);
+
 //jsCoin.miner.start();
