@@ -15,7 +15,8 @@
     "js-sha3": "^0.7.0",
     "optimist": "^0.6.1",
     "stream-set": "^1.1.0",
-    "tweetnacl": "^1.0.0"
+    "tweetnacl": "^1.0.0",
+    "validator": "^10.3.0"
   },
   "devDependencies": {
     "devtron": "^1.4.0",
