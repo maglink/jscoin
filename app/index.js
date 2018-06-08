@@ -5,9 +5,7 @@ const url = require('url');
 let jsCoin = require("../lib");
 let pathForConfig = app.getPath("userData");
 jsCoin.init(pathForConfig, "data/config.json");
-
 global.jsCoin = jsCoin;
-
 
 let mainWindow;
 

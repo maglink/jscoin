@@ -1,0 +1,73 @@
+<div>Hello from wallet</div>
+
+<h1>JS Coin</h1>
+
+<h2>Wallet</h2>
+<div>Address: {{address}}</div>
+<div>Balance: {{balance}}</div>
+
+<h2>Network</h2>
+<div>Last block height: {{lastBlock.header.height}}</div>
+<div>Last block difficulty: {{lastBlock.header.difficulty}}</div>
+<div>Network hashrate ~ {{(networkHashrate).toFixed(0)}} h/s</div>
+
+<h2>Mining</h2>
+<div>Power: {{mineSpeed}}</div>
+<button ng-click="mineStart()">start</button>
+<button ng-click="mineStop()">stop</button>
+
+
+<h2>Transaction</h2>
+
+
+<table>
+    <tr ng-repeat="item in trxs">
+        <td>{{ item.trx_hash }}</td>
+        <td>{{ item.trx_timestamp }}</td>
+        <td>{{ item.block_height }}</td>
+        <td>{{ item.change }}</td>
+        <td>{{ item.fee }}</td>
+    </tr>
+</table>
+
+
+<form name="createTrx" ng-submit="createTransaction(createTrx)">
+
+    <div class="trx_add-head">
+        Transaction
+    </div>
+
+    <div class="trx_add-body">
+
+        <input type="text" name="address" placeholder="Address"
+               ng-model="newTrx.address" required="">
+
+        <div ng-show="createTrx.$submitted || createTrx.address.$touched">
+            <div ng-show="createTrx.address.$error.required">Enter the address.</div>
+        </div>
+
+        <br/>
+
+        <input type="number" name="amount" placeholder="Amount"
+               ng-model="newTrx.amount" step="0.00000001" min="0.00001" ng-max="balance" required>
+
+        <div ng-show="createTrx.$submitted || createTrx.amount.$touched">
+            <div ng-show="createTrx.amount.$error.required">Enter the amount.</div>
+            <div ng-show="createTrx.amount.$error.number">Not valid number!</div>
+            <div ng-show="createTrx.amount.$error.min">Min amount is 0.00001</div>
+            <div ng-show="createTrx.amount.$error.max">Amount more than your balance</div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <textarea placeholder="Message" ng-model="newTrx.message"></textarea>
+
+        <br/>
+    </div>
+
+    <div class="trx_add-ctrl">
+        <button class="btn">Send</button>
+    </div>
+
+</form>
