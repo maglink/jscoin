@@ -44,6 +44,11 @@ App.config(['$routeProvider',
                 controller: 'NetworkCtrl',
                 reloadOnSearch: false
             })
+            .when('/transaction/:hash', {
+                templateUrl: 'views/transaction.html',
+                controller: 'TransactionCtrl',
+                reloadOnSearch: false
+            })
             .otherwise({redirectTo: '/wallet'});
     }]);
 
@@ -52,4 +57,44 @@ let jsCoin = remote.getGlobal('jsCoin');
 
 App.factory('jsCoin', function () {
     return jsCoin;
+});
+
+App.controller('SendToastCtrl', function($scope, $mdToast, $location) {
+    let closed = false;
+
+    $scope.showDetails = function(hash) {
+        $scope.closeToast();
+        $location.url("/transaction/"+hash)
+    };
+
+    $scope.closeToast = function() {
+        if(closed){
+            return;
+        }
+        closed = true;
+        $mdToast.hide();
+    };
+});
+
+App.config(function ($mdToastProvider) {
+    $mdToastProvider.addPreset('transactionToast', {
+        options: function() {
+            return {
+                hideDelay: 3000,
+                position: 'top right',
+                controller: 'SendToastCtrl',
+                template:  `
+                <md-toast>
+                  <span class="md-toast-text" flex>Transaction successfully created</span>
+                  <md-button class="md-highlight" ng-click="showDetails(toastHash)">
+                    Show details
+                  </md-button>
+                  <md-button ng-click="closeToast()">
+                    Close
+                  </md-button>
+                </md-toast>
+                `
+            };
+        }
+    });
 });

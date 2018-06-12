@@ -1,4 +1,4 @@
-AppControllers.controller('WalletCtrl', function ($scope, $rootScope, jsCoin) {
+AppControllers.controller('WalletCtrl', function ($scope, $rootScope, jsCoin, $location) {
 
     $rootScope.changeNavItem('wallet');
 
@@ -20,18 +20,24 @@ AppControllers.controller('WalletCtrl', function ($scope, $rootScope, jsCoin) {
     }
     updateTrxsList();
 
-    jsCoin.blocks.storage.onChangeLastBlock(() => {
+    let onChangeLastBlock = () => {
         updateBalance();
         updateTrxsList();
         setTimeout(() => $scope.$apply(), 0);
-    });
-
-    jsCoin.transactions.storage.onTransactionsAdded(() => {
+    };
+    let onTransactionsAdded = () => {
         updateBalance();
         updateTrxsList();
         setTimeout(() => $scope.$apply(), 0);
-    });
+    };
 
+    jsCoin.blocks.storage.onChangeLastBlock(onChangeLastBlock);
+    jsCoin.transactions.storage.onTransactionsAdded(onTransactionsAdded);
+
+    $scope.$on('$destroy', function() {
+        jsCoin.blocks.storage.removeOnChangeLastBlock(onChangeLastBlock);
+        jsCoin.transactions.storage.removeOnTransactionsAdded(onTransactionsAdded);
+    });
 
     let maxTrxsCount = null;
     $scope.infiniteItems = {
@@ -58,5 +64,9 @@ AppControllers.controller('WalletCtrl', function ($scope, $rootScope, jsCoin) {
         },
 
     };
+
+    $scope.openTransaction = function(hash) {
+        $location.url("/transaction/"+hash)
+    }
 
 });

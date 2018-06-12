@@ -6,6 +6,12 @@
         <div>Network hashrate ~ <b>{{(networkHashrate).toFixed(0)}} h/s</b></div>
     </div>
 
+    <div>
+        <md-button md-no-ink class="md-primary" ng-click="showPeers()">
+            Peers:
+            {{peers.length}}
+        </md-button>
+    </div>
 
     <div id="mining" class="md-padding" md-whiteframe="1" layout layout-align="center center">
 

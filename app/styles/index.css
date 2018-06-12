@@ -75,7 +75,13 @@ form[name=createTrx] > md-input-container {
     border-bottom: 1px solid #ddd;
     box-sizing: border-box;
     height: 40px;
-    padding-top: 10px; }
+    padding-top: 10px;
+}
+
+#vertical-container .repeated-item:hover {
+    cursor: pointer;
+    background-color: #cde4f1;
+}
 
 #vertical-container md-content {
     margin: 16px; }
@@ -135,4 +141,8 @@ form[name=createTrx] > md-input-container {
     width: 100%;
     font-size: 14px;
     text-align: center;
+}
+
+#trx-info-hash {
+    font-size: 14px;
 }

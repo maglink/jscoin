@@ -1,4 +1,4 @@
-AppControllers.controller('SendCtrl', function ($scope, $rootScope, jsCoin) {
+AppControllers.controller('SendCtrl', function ($scope, $rootScope, jsCoin, $mdToast) {
 
     let publicKey = jsCoin.config.data.wallet.pubKey;
     $scope.address = jsCoin.transactions.getAddressFromPubKey(publicKey);
@@ -30,8 +30,16 @@ AppControllers.controller('SendCtrl', function ($scope, $rootScope, jsCoin) {
     };
     $scope.maxMessageLenCalc();
 
-    $scope.createTransaction = function (form) {
+    let showErrToast = function(e) {
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent(e.message)
+                .position("top right")
+                .hideDelay(3000)
+        );
+    };
 
+    $scope.createTransaction = function (form) {
         if ($scope.maxMessageLenCalc()) {
             form.message.$error.maxlength = true;
             return;
@@ -41,16 +49,15 @@ AppControllers.controller('SendCtrl', function ($scope, $rootScope, jsCoin) {
 
         try {
             let amount = Math.floor($scope.newTrx.amount * 100000000);
-            console.log("create and send")
-            jsCoin.transactions.createAndSendTransaction($scope.newTrx.address,
+            let trx = jsCoin.transactions.createAndSendTransaction($scope.newTrx.address,
                 amount, $scope.newTrx.message, "");
+            $rootScope.toastHash = trx.hash;
+            $mdToast.show($mdToast.transactionToast());
         } catch (e) {
             console.log(e);
-            //toast
+            showErrToast(e);
             return;
         }
-
-        console.log("after party")
 
         if (form) {
             form.$setPristine();
@@ -92,13 +99,20 @@ AppControllers.controller('SendCtrl', function ($scope, $rootScope, jsCoin) {
         return false
     };
 
-    jsCoin.blocks.storage.onChangeLastBlock(() => {
+    let onChangeLastBlock = () => {
         updateBalance();
         setTimeout(() => $scope.$apply(), 0);
-    });
+    };
+    let onTransactionsAdded = () => {
+        updateBalance();
+        setTimeout(() => $scope.$apply(), 0);
+    };
 
-    jsCoin.transactions.storage.onTransactionsAdded(() => {
-        updateBalance();
-        setTimeout(() => $scope.$apply(), 0);
+    jsCoin.blocks.storage.onChangeLastBlock(onChangeLastBlock);
+    jsCoin.transactions.storage.onTransactionsAdded(onTransactionsAdded);
+
+    $scope.$on('$destroy', function() {
+        jsCoin.blocks.storage.removeOnChangeLastBlock(onChangeLastBlock);
+        jsCoin.transactions.storage.removeOnTransactionsAdded(onTransactionsAdded);
     });
 });

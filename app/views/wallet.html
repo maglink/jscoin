@@ -5,11 +5,15 @@
     </div>
 
     <md-virtual-repeat-container id="vertical-container">
-        <div md-virtual-repeat="item in infiniteItems" md-on-demand class="repeated-item" flex>
+        <div md-virtual-repeat="item in infiniteItems" md-on-demand class="repeated-item" flex ng-click="openTransaction(item.trx_hash)">
 
             <div flex style="overflow: hidden; white-space: nowrap;">
-                <md-icon ng-if="item.block_height" md-svg-src="images/icons/done.svg" aria-label="{{3}} confirms"></md-icon>
-                <md-icon ng-if="!item.block_height" md-svg-src="images/icons/schedule.svg" aria-label="Unconfirmed"></md-icon>
+                <md-icon ng-if="item.block_height" md-svg-src="images/icons/done.svg" aria-label="In block {{item.block_height}}">
+                    <md-tooltip md-direction="top">In block {{item.block_height}}</md-tooltip>
+                </md-icon>
+                <md-icon ng-if="!item.block_height" md-svg-src="images/icons/schedule.svg" aria-label="Unconfirmed">
+                    <md-tooltip md-direction="top">Unconfirmed</md-tooltip>
+                </md-icon>
                 <span class="trx-change" ng-class="{'red': item.change <= 0, 'green': item.change > 0}">
                     {{ (item.change - item.fee) / 100000000 }}
                 </span>

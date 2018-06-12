@@ -1,0 +1,44 @@
+<div layout="column" layout-align="center center">
+
+    <h3>Transaction</h3>
+    <div id="trx-info-hash">{{hash}}</div>
+
+    <br>
+
+    <div class="md-padding" ng-if="!info">Transaction detail information not found</div>
+
+    <div class="md-padding" ng-if="info">
+
+        <div ng-if="!info.height">
+            Unconfirmed
+            <br>
+            <b>Sent to peers:</b> {{info.propagate_count || 0}}
+        </div>
+        <div ng-if="info.height">
+            <b>Confirmations:</b> {{lastHeight - info.height + 1}}
+            <br>
+            <b>Block height:</b> {{info.height}}
+        </div>
+        <div>
+            <b>Time:</b> {{ info.data.body.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}
+        </div>
+        <div>
+            <b>From:</b> {{info.data.body.from || "coinbase"}}
+            <br>
+            <b>To:</b> {{info.data.body.to}}
+        </div>
+        <div ng-if="!info.data.body.from">
+            <b>Reward:</b> {{(info.data.body.amount / 100000000).toFixed(8)}}
+            <br>
+            <b>Fees:</b> {{(info.data.body.fees / 100000000).toFixed(8)}}
+        </div>
+        <div ng-if="info.data.body.from">
+            <b>Amount:</b> {{(info.data.body.amount / 100000000).toFixed(8)}}
+            <br>
+            <b>Fee:</b> {{(info.data.body.fee / 100000000).toFixed(8)}}
+        </div>
+        <div ng-if="info.data.body.message">
+            <b>Message:</b> {{info.data.body.message}}
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-AppControllers.controller('NetworkCtrl', function ($scope, $rootScope, jsCoin) {
+AppControllers.controller('NetworkCtrl', function ($scope, $rootScope, jsCoin, $interval, $mdDialog) {
     let miner = jsCoin.miner;
 
     $rootScope.mineSpeed = $rootScope.mineSpeed || 0;
@@ -26,11 +26,35 @@ AppControllers.controller('NetworkCtrl', function ($scope, $rootScope, jsCoin) {
     }
     updateNetwork();
 
-    jsCoin.blocks.storage.onChangeLastBlock(() => {
+    let updatePeers = function() {
+        $scope.peers = jsCoin.peers.getList();
+    };
+    updatePeers();
+
+    let peersInterval = $interval(function() {
+        updatePeers();
+    }, 1000);
+
+    let onChangeLastBlock = () => {
         updateNetwork();
         setTimeout(() => $scope.$apply(), 0);
+    };
+
+    jsCoin.blocks.storage.onChangeLastBlock(onChangeLastBlock);
+
+    $scope.$on('$destroy', function() {
+        $interval.cancel(peersInterval);
+        jsCoin.blocks.storage.removeOnChangeLastBlock(onChangeLastBlock);
     });
 
+    $scope.showPeers = function() {
+        $mdDialog.show(
+            $mdDialog.alert()
+                .title('Peers')
+                .textContent($scope.peers.join(", "))
+                .ok('Ok')
+        );
+    };
 });
 
 
