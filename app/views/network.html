@@ -1,0 +1,32 @@
+<div layout="column" layout-align="center center" style="height: 100%">
+
+    <div id="network-stats" class="md-padding">
+        <div>Last block height: <b>{{lastBlock.header.height}}</b></div>
+        <div>Last block difficulty: <b>{{lastBlock.header.difficulty}}</b></div>
+        <div>Network hashrate ~ <b>{{(networkHashrate).toFixed(0)}} h/s</b></div>
+    </div>
+
+
+    <div id="mining" class="md-padding" md-whiteframe="1" layout layout-align="center center">
+
+        <h3>Mining</h3>
+
+        <div id="mining-progress" >
+            <div ng-show="mineSpeed">
+                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                <span id="mining-speed">{{mineSpeed}}</span>
+            </div>
+            <div ng-show="!mineSpeed">
+                <md-progress-linear md-mode="determinate" value="0"></md-progress-linear>
+            </div>
+        </div>
+
+        <md-button ng-disabled="mineSpeed" class="md-raised md-primary" ng-click="mineStart()">start</md-button>
+        <md-button ng-disabled="!mineSpeed" class="md-raised md-warn" ng-click="mineStop()">stop</md-button>
+    </div>
+
+
+
+</div>
+
+

@@ -1,3 +1,138 @@
-form[name="createTrx"] {
-    height: 300px;
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}
+
+header {
+    background-color: rgba(255, 255, 0, 0.38);
+}
+
+body {
+    min-height: 100%;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+}
+
+main > div {
+    height: 100%;
+    width: 100%;
+}
+
+.balance {
+    font-size: 16px;
+    color: #8bb3cd;
+}
+
+.balance .balance-coins {
+    margin-left: 20px;
+    font-size: 26px;
+    color: #78b2f1;
+    font-weight: bold;
+}
+
+#wallet-address {
+    padding-top: 20px;
+}
+
+form[name=createTrx] {
+    width: 400px;
+}
+
+[ng-messages] > div {
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+#trx-message {
+    max-height: 100px;
+}
+
+form[name=createTrx] md-input-container {
+    margin-top: 0;
+}
+
+form[name=createTrx] > div:first-child > md-input-container:first-child {
+    margin-top: 15px;
+}
+
+form[name=createTrx] > md-input-container {
+    margin-bottom: -5px;
+}
+
+
+#vertical-container {
+    height: 220px;
+    width: 100%;
+    max-width: 550px;
+}
+
+#vertical-container .repeated-item {
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    height: 40px;
+    padding-top: 10px; }
+
+#vertical-container md-content {
+    margin: 16px; }
+
+#vertical-container md-virtual-repeat-container {
+    border: solid 1px grey; }
+
+#vertical-container .md-virtual-repeat-container .md-virtual-repeat-offsetter div {
+    padding-left: 16px; }
+
+
+.trx-change {
+    display: inline-block;
+    padding-left: 10px;
+    width: 100px;
+    text-align: center;
+}
+.trx-change.red {
+    color: red;
+}
+.trx-change.green {
+    color: green;
+}
+
+.trx-time {
+    font-size: 12px;
+}
+.trx-address {
+    padding-left: 10px;
+    font-size: 12px;
+}
+
+
+#network-stats {
+    margin-top: -90px;
+}
+
+#mining {
+    margin-top: 30px;
+    width: 550px;
+}
+
+#mining h3 {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#mining-progress {
+    position: relative;
+    width: 280px;
+    padding-right: 20px;
+}
+
+#mining-speed {
+    position: absolute;
+    top: -18px;
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
 }

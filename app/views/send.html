@@ -1,0 +1,46 @@
+<div layout="column" layout-align="center center">
+    <form name="createTrx" ng-submit="createTransaction(createTrx)" ng-if="getMaxAmount() >= 0.01">
+        <div layout="row">
+            <md-input-container flex="100">
+                <label>To address</label>
+                <input required name="address" ng-model="newTrx.address" ng-change="validateAddress(newTrx.address, createTrx.address.$error)">
+                <div ng-messages ng-if="createTrx.$submitted || createTrx.address.$touched">
+                    <div ng-if="createTrx.address.$error.required">This is required.</div>
+                    <div ng-if="createTrx.address.$error.validate">Address is invalid</div>
+                </div>
+            </md-input-container>
+        </div>
+
+        <div layout="row">
+            <md-input-container class="md-block" flex="70">
+                <label>Amount</label>
+                <input required type="number" name="amount" value="0" ng-model="newTrx.amount" step="0.00000001" min="0.01"
+                       ng-max="getMaxAmount()"/>
+                <div ng-messages ng-if="createTrx.$submitted || createTrx.amount.$touched">
+                    <div ng-if="createTrx.amount.$error.required">This is required.</div>
+                    <div ng-if="createTrx.amount.$error.number">Number is invalid</div>
+                    <div ng-if="createTrx.amount.$error.min">Lower transaction amount is 0.01 coins</div>
+                    <div ng-if="createTrx.amount.$error.max">Amount (and fee for transaction) is more than your balance.
+                        Max amount is <a href="" ng-click="setMaxAmount()">{{getMaxAmount()}}</a></div>
+                </div>
+            </md-input-container>
+
+            <md-input-container flex="30">
+                <label>Fee</label>
+                <input type="number" ng-value="(newTrx.amount * 0.002).toFixed(8)" disabled="disabled" />
+            </md-input-container>
+        </div>
+
+        <md-input-container class="md-block" ng-class="{'md-input-invalid': newTrx.message.length > maxMessageLen}">
+            <label>Message</label>
+            <textarea id="trx-message" name="message" ng-model="newTrx.message" rows="3" md-select-on-focus
+                      ng-class="{'ng-invalid': newTrx.message.length > maxMessageLen}"></textarea>
+            <div class="md-errors-spacer"><div class="md-char-counter">{{newTrx.message.length || 0}} / {{maxMessageLen}}</div></div>
+        </md-input-container>
+
+        <md-button type="submit" class="md-raised md-primary" ng-disabled="formIsErrored(createTrx)">Submit</md-button>
+    </form>
+    <div class="md-padding" ng-if="getMaxAmount() < 0.01" style="color: gray">
+        You do not have enough coins to send a transaction
+    </div>
+</div>

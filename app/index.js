@@ -10,7 +10,7 @@ global.jsCoin = jsCoin;
 let mainWindow;
 
 function createWindow () {
-    mainWindow = new BrowserWindow({width: 1400, height: 600});
+    mainWindow = new BrowserWindow({width: 640, height: 420});
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
@@ -18,7 +18,7 @@ function createWindow () {
     }));
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', function () {
         mainWindow = null

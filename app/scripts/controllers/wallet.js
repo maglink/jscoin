@@ -1,72 +1,62 @@
-AppControllers.controller('WalletCtrl',
-    function ($scope, jsCoin) {
+AppControllers.controller('WalletCtrl', function ($scope, $rootScope, jsCoin) {
 
-        $scope.publicKey = jsCoin.config.data.wallet.pubKey;
-        $scope.address = jsCoin.transactions.getAddressFromPubKey($scope.publicKey);
+    $rootScope.changeNavItem('wallet');
+
+    let publicKey = jsCoin.config.data.wallet.pubKey;
+    $scope.address = jsCoin.transactions.getAddressFromPubKey(publicKey);
+
+    function updateBalance() {
+        let satishiInCoin = 100000000;
+        let satoshiBalance = jsCoin.transactions.storage.getAddressBalance($scope.address);
+        //satoshiBalance = 145.0 * satishiInCoin;
+
+        $scope.balanceCoins = Math.floor(satoshiBalance / satishiInCoin);
+        $scope.balanceSatoshi = ("" + (satoshiBalance % satishiInCoin / satishiInCoin).toFixed(8)).substr(2)
+    }
+    updateBalance();
+
+    function updateTrxsList() {
+        $scope.trxs = jsCoin.transactions.getTrxsListByAddress($scope.address, 10, 0);
+    }
+    updateTrxsList();
+
+    jsCoin.blocks.storage.onChangeLastBlock(() => {
         updateBalance();
-        updateNetwork();
         updateTrxsList();
-
-        let miner = jsCoin.miner;
-
-        $scope.mineSpeed = 0;
-        miner.speedCounter.setPrintHandler((speed) => {
-            $scope.mineSpeed = speed + " h/s";
-            setTimeout(() => $scope.$apply(), 0);
-        });
-
-        $scope.mineStart = () => {
-            $scope.mineSpeed = "calculating...";
-            miner.start();
-        };
-
-        $scope.mineStop = () => {
-            miner.stop();
-            $scope.mineSpeed = 0;
-        };
-
-        jsCoin.blocks.storage.onChangeLastBlock(() => {
-            updateNetwork();
-            updateBalance();
-            updateTrxsList();
-            setTimeout(() => $scope.$apply(), 0);
-        });
-
-        jsCoin.transactions.storage.onTransactionsAdded(() => {
-            updateBalance();
-            updateTrxsList();
-            setTimeout(() => $scope.$apply(), 0);
-        });
-
-        function updateBalance() {
-            $scope.balance = jsCoin.transactions.storage.getAddressBalance($scope.address);
-            $scope.balance = ($scope.balance/100000000).toFixed(8);
-        }
-
-        function updateNetwork() {
-            $scope.lastBlock = jsCoin.blocks.storage.getLastBlockHeader();
-            $scope.networkDifficulty = $scope.lastBlock.header.difficulty;
-
-            //please let me know how calculate it properly
-            $scope.networkHashrate = Math.pow(16, ($scope.networkDifficulty/16))/600;
-        }
-
-        function updateTrxsList() {
-            $scope.trxs = jsCoin.transactions.getTrxsListByAddress($scope.address);
-        }
-
-        $scope.newTrx = {};
-        $scope.createTransaction = function(form) {
-            if (form) {
-                form.$setPristine();
-                form.$setUntouched();
-            }
-
-            let amount = Math.floor($scope.newTrx.amount*100000000);
-
-            jsCoin.transactions.createAndSendTransaction($scope.newTrx.address,
-                amount, $scope.newTrx.message, "");
-
-            $scope.newTrx = {};
-        };
+        setTimeout(() => $scope.$apply(), 0);
     });
+
+    jsCoin.transactions.storage.onTransactionsAdded(() => {
+        updateBalance();
+        updateTrxsList();
+        setTimeout(() => $scope.$apply(), 0);
+    });
+
+
+    let maxTrxsCount = null;
+    $scope.infiniteItems = {
+
+        getItemAtIndex: function(index) {
+            if (index >= $scope.trxs.length) {
+                let moreTrxs = jsCoin.transactions.getTrxsListByAddress($scope.address, 10, $scope.trxs.length);
+                if(!moreTrxs.length || moreTrxs.length < 10) {
+                    maxTrxsCount = $scope.trxs.length;
+                }
+                $scope.trxs = $scope.trxs.concat(moreTrxs);
+            }
+            return $scope.trxs[index];
+        },
+
+        getLength: function() {
+            if(maxTrxsCount && maxTrxsCount === $scope.trxs.length) {
+                return maxTrxsCount;
+            }
+            if($scope.trxs.length < 10) {
+                return $scope.trxs.length;
+            }
+            return $scope.trxs.length + 10;
+        },
+
+    };
+
+});
