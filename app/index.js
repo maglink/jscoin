@@ -10,7 +10,11 @@ global.jsCoin = jsCoin;
 let mainWindow;
 
 function createWindow () {
-    mainWindow = new BrowserWindow({width: 640, height: 420});
+    mainWindow = new BrowserWindow({
+        width: 640, height: 420,
+        minWidth: 640, minHeight: 420,
+        icon: path.join(__dirname, 'icon/png/64x64.png')
+    });
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
