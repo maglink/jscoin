@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         createDMG({
             overwrite: true,
             appPath: "build/jscoin-darwin-x64/jscoin.app",
-            name: "JScoin",
+            name: "jscoin_1.0.0_osx",
             icon: "app/icon/mac/icon.icns",
             out: "build/installers/"
         }, function (err) {
