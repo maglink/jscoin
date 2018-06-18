@@ -1,3 +1,5 @@
+![JScoin icon](https://github.com/maglink/jscoin/raw/master/app/icon/png/128x128.png)
+
 # jscoin
 Cryptocurrency on JavaScript
 
