@@ -1,6 +1,9 @@
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
+const unhandled = require('electron-unhandled');
+
+unhandled();
 
 let jsCoin = require("../lib");
 let pathForConfig = app.getPath("userData");
