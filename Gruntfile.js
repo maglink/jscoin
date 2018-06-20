@@ -1,5 +1,12 @@
 'use strict';
 
+let fs = require('fs');
+let glob = require('glob');
+let packageInfo = require("./package.json");
+let createDMG = require('electron-installer-dmg');
+let installerDEB = require('electron-installer-debian');
+let zip = require('electron-installer-zip');
+
 module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
@@ -57,17 +64,14 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('createDMG', 'Create .dmg from .app file', function() {
-        let fs = require('fs');
-        if (!fs.existsSync('build/installers')){
-            fs.mkdirSync('build/installers');
-        }
+        if (!fs.existsSync('build/installers')) fs.mkdirSync('build/installers');
+        require("glob").sync("build/installers/*.dmg").forEach(fs.unlinkSync);
 
-        let createDMG = require('electron-installer-dmg');
         let done = this.async();
         createDMG({
             overwrite: true,
             appPath: "build/jscoin-darwin-x64/jscoin.app",
-            name: "jscoin_1.0.0_osx",
+            name: `jscoin_${packageInfo.version}_osx`,
             icon: "app/icon/mac/icon.icns",
             out: "build/installers/"
         }, function (err) {
@@ -82,7 +86,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('createDEB', 'Create .deb for linux', function() {
-        let installer = require('electron-installer-debian');
+        glob.sync("build/installers/*.deb").forEach(fs.unlinkSync);
+
         let options = {
             src: 'build/jscoin-linux-x64/',
             dest: 'build/installers/',
@@ -90,10 +95,8 @@ module.exports = function(grunt) {
             productDescription: "jscoin"
         };
 
-        console.log('Creating package for debian..');
-
         let done = this.async();
-        installer(options)
+        installerDEB(options)
             .then(() => done())
             .catch(err => {
                 grunt.log.error(err.message);
@@ -102,11 +105,11 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('createZIP', 'Create zip for windows', function() {
-        let zip = require('electron-installer-zip');
+        glob.sync("build/installers/*.zip").forEach(fs.unlinkSync);
 
         let opts = {
             dir: 'build/jscoin-win32-ia32/jscoin.exe',
-            out: 'build/installers/jscoin-win32-ia32'
+            out: `build/installers/jscoin_${packageInfo.version}_win32`
         };
 
         let done = this.async();
@@ -120,11 +123,9 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('createZIP2', 'Create zip for windows', function() {
-        let zip = require('electron-installer-zip');
-
         let opts = {
             dir: 'build/jscoin-win32-x64/jscoin.exe',
-            out: 'build/installers/jscoin-win32-x64'
+            out: `build/installers/jscoin_${packageInfo.version}_win64`
         };
 
         let done = this.async();
