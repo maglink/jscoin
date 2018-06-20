@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 
         let opts = {
             dir: 'build/jscoin-win32-ia32/jscoin.exe',
-            out: `build/installers/jscoin_${packageInfo.version}_win32`
+            out: `build/installers/jscoin_${packageInfo.version}_win32.zip`
         };
 
         let done = this.async();
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
     grunt.registerTask('createZIP2', 'Create zip for windows', function() {
         let opts = {
             dir: 'build/jscoin-win32-x64/jscoin.exe',
-            out: `build/installers/jscoin_${packageInfo.version}_win64`
+            out: `build/installers/jscoin_${packageInfo.version}_win64.zip`
         };
 
         let done = this.async();
