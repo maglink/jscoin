@@ -19,10 +19,7 @@ AppControllers.controller('NetworkCtrl', function ($scope, $rootScope, jsCoin, $
 
     function updateNetwork() {
         $scope.lastBlock = jsCoin.blocks.storage.getLastBlockHeader();
-        $scope.networkDifficulty = $scope.lastBlock.header.difficulty;
-
-        //please let me know how calculate it properly
-        $scope.networkHashrate = Math.pow(16, ($scope.networkDifficulty / 16)) / 600;
+        $scope.networkHashrate = jsCoin.blocks.getNetworkHashrate();
     }
     updateNetwork();
 
